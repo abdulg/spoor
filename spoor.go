@@ -67,3 +67,13 @@ func Infof(format string, v ...interface{}) {
 func Debugf(format string, v ...interface{}) {
 	std.Debugf(format, v...)
 }
+
+// DebugOn activates the debug logger
+func DebugOn() {
+	std.DebugOn()
+}
+
+// DebugOff deactivates the debug logger
+func DebugOff() {
+	std.DebugOff()
+}
