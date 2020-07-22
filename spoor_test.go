@@ -13,8 +13,13 @@ func TestInfo(t *testing.T) {
 		debugLog      string
 		infoExpected  string
 		debugExpected string
+		debugOn       bool
 	}{
-		{"Hello, info", "", "info: Hello, info\n", ""},
+		{"Hello, info", "", "info: Hello, info\n", "debug: \n", true},
+		{"Hello, info", "", "info: Hello, info\n", "", false},
+		{"", "Hello, debug", "info: \n", "debug: Hello, debug\n", true},
+		{"", "Hello, debug", "info: \n", "", false},
+		{"Hello, info", "Hello, debug", "info: Hello, info\n", "debug: Hello, debug\n", true},
 	}
 	for _, test := range tests {
 		var infoBuf bytes.Buffer
@@ -23,18 +28,17 @@ func TestInfo(t *testing.T) {
 		debug := log.New(&debugBuf, "debug: ", 0)
 		testSpoor := spoor.New(info, debug)
 
-		if test.infoLog != "" {
-			testSpoor.Infof("%s", test.infoLog)
-			if infoBuf.String() != test.infoExpected {
-				t.Errorf("Expected '%s', received '%s'", test.infoExpected, infoBuf.String())
-			}
+		testSpoor.Infof("%s", test.infoLog)
+		if infoBuf.String() != test.infoExpected {
+			t.Errorf("Expected '%s', received '%s'", test.infoExpected, infoBuf.String())
 		}
 
-		if test.debugLog != "" {
-			testSpoor.Debugf("%s", test.debugLog)
-			if infoBuf.String() != test.debugExpected {
-				t.Errorf("Expected '%s', received '%s'", test.debugExpected, debugBuf.String())
-			}
+		if test.debugOn == true {
+			testSpoor.DebugOn()
+		}
+		testSpoor.Debugf("%s", test.debugLog)
+		if debugBuf.String() != test.debugExpected {
+			t.Errorf("Expected '%s', received '%s'", test.debugExpected, debugBuf.String())
 		}
 	}
 }
