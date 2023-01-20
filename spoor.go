@@ -8,8 +8,8 @@ import (
 
 // SpoorInterface is an interface that define 2 loggers, Info and Debug, and a set of methods to turn the debug logger on/off.
 type SpoorInterface interface {
-	Infof(format string, v ...interface{})
-	Debugf(format string, v ...interface{})
+	Infof(format string, v ...any)
+	Debugf(format string, v ...any)
 	DebugOn()
 	DebugOff()
 }
@@ -29,9 +29,15 @@ func New(info *log.Logger, debug *log.Logger) *Spoor {
 }
 
 // Infof prints to the info logger.
-// Arguments are handled in the manner of fmt.Printf
-func (l *Spoor) Infof(format string, v ...interface{}) {
+// Arguments are handled in the manner of log.Printf
+func (l *Spoor) Infof(format string, v ...any) {
 	l.info.Printf(format, v...)
+}
+
+// Info prints to the info logger.
+// Arguments are handled in the manner of log.Printf
+func (l *Spoor) Info(v ...any) {
+	l.info.Print(v...)
 }
 
 // DebugOn activates the debug logger
@@ -45,10 +51,18 @@ func (l *Spoor) DebugOff() {
 }
 
 // Debugf prints to the debug logger if the debug flag is set.
-// Arguments are handled in the manner of fmt.Printf
-func (l *Spoor) Debugf(format string, v ...interface{}) {
+// Arguments are handled in the manner of log.Printf
+func (l *Spoor) Debugf(format string, v ...any) {
 	if l.debugFlag {
 		l.debug.Printf(format, v...)
+	}
+}
+
+// Debug prints to the debug logger if the debug flag is set.
+// Arguments are handled in the manner of log.Printf
+func (l *Spoor) Debug(v ...any) {
+	if l.debugFlag {
+		l.debug.Print(v...)
 	}
 }
 
@@ -59,12 +73,22 @@ var std = New(info, debug)
 // These function write to the std Spoor
 
 // Infof prints to the info logger on the std Spoor
-func Infof(format string, v ...interface{}) {
+func Infof(format string, v ...any) {
 	std.Infof(format, v...)
 }
 
+// Info prints to the info logger on the std Spoor
+func Info(v ...any) {
+	std.Info(v...)
+}
+
+// Debug prints to the info logger on the std Spoor
+func Debug(v ...any) {
+	std.Debug(v...)
+}
+
 // Debugf prints to the info logger on the std Spoor
-func Debugf(format string, v ...interface{}) {
+func Debugf(format string, v ...any) {
 	std.Debugf(format, v...)
 }
 

@@ -1,4 +1,4 @@
 module "github.com/abdulg/spoor"
 
-go 1.14
+go 1.18
 
