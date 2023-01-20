@@ -9,7 +9,9 @@ import (
 // SpoorInterface is an interface that define 2 loggers, Info and Debug, and a set of methods to turn the debug logger on/off.
 type SpoorInterface interface {
 	Infof(format string, v ...any)
+	Info(v ...any)
 	Debugf(format string, v ...any)
+	Debug(v ...any)
 	DebugOn()
 	DebugOff()
 }
@@ -69,6 +71,10 @@ func (l *Spoor) Debug(v ...any) {
 var info = log.New(os.Stderr, "info: ", log.LstdFlags)
 var debug = log.New(os.Stderr, "debug: ", log.LstdFlags)
 var std = New(info, debug)
+
+func Default() *Spoor {
+	return std
+}
 
 // These function write to the std Spoor
 
